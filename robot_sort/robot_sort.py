@@ -93,6 +93,65 @@ class SortingRobot:
         return self._light == "ON"
 
     ''' first implementation - selection sort '''
+
+    def right_bubble(self):
+        self.swap_item()
+        self.move_right()
+        if self.compare_item() == 1:
+            self.swap_item()
+            self.set_light_off()
+        self.move_left()
+        self.swap_item()
+        self.move_right()
+
+    def right_bubble_cocktail(self):
+        self.swap_item()
+        self.move_right()
+        if self.compare_item() == 1:
+            self.swap_item()
+            self.set_light_off()
+        self.move_left()
+        self.swap_item()
+        # ignore final move right
+
+    def left_bubble(self):
+        self.swap_item()
+        self.move_left()
+        if self.compare_item() == -1:
+            self.swap_item()
+            self.set_light_off()
+        self.move_right()
+        self.swap_item()
+        self.move_left()
+
+    def left_bubble_alt(self):
+        # idea here - move left 2 at a time, rather than 1, to help some bubble up faster
+        self.swap_item()
+        self.move_left()
+        if self.can_move_left():
+            self.move_left()
+        if self.compare_item() == -1:
+            self.swap_item()
+            self.set_light_off()
+        
+        while self.compare_item() is not None:
+            self.move_right()
+        # self.move_right()
+        # self.move_right()
+        self.swap_item()
+        self.move_left()
+
+    def left_bubble_cocktail(self):
+        self.swap_item()
+        self.move_left()
+        if self.compare_item() == -1:
+            self.swap_item()
+            self.set_light_off()
+        self.move_right()
+        self.swap_item()
+        # ignore final move left
+            
+
     def sort(self):
         """
         Sort the robot's list.
@@ -100,21 +159,98 @@ class SortingRobot:
         # test_list = self._list[:]
    
         # print(self._list)
+   
+        # working implementation DO NOT CHANGE
+        # while self.light_is_on() == False:
+        #     self.set_light_on()
+        #     while self.can_move_right() == True:
+        #         self.swap_item()
+        #         self.move_right()
+        #         if self.compare_item() == 1:
+        #             self.swap_item()
+        #             self.set_light_off()
+        #         self.move_left()
+        #         self.swap_item()
+        #         self.move_right()
+        #     while self.can_move_left() == True:
+        #         self.move_left()
+
+        # next implementation - do bubble sort on the way back
+        # WORKING, DO NOT CHANGE
+        # self.right_bubble()
+        # while self.light_is_on() == False:
+        #     self.set_light_on()
+        #     # first pass - moving right
+        #     while self.can_move_right() == True:
+        #         self.right_bubble()
+            
+        #     if self.light_is_on() == True:
+        #         break
+
+        #     # once you get to the end, don't need to re-compare last two.
+        #     # can move left one before doing left_bubble()
+        #     self.move_left()
+        #     while self.can_move_left() == True:
+        #     # second pass - moving left
+        #         self.left_bubble()
+                
+        #     # don't need to compare last two again
+        #     if self.light_is_on() == False:
+        #         self.move_right()
+
+        # attempt with left_bubble_alt
+
+        self.right_bubble()
         while self.light_is_on() == False:
             self.set_light_on()
+            # first pass - moving right
             while self.can_move_right() == True:
-                self.swap_item()
-                self.move_right()
-                if self.compare_item() == 1:
-                    self.swap_item()
-                    self.set_light_off()
-                self.move_left()
-                self.swap_item()
-                self.move_right()
-            while self.can_move_left() == True:
-                self.move_left()
+                self.right_bubble()
+            
+            if self.light_is_on() == True:
+                break
 
-        # print(test_list == self._list)
+            # once you get to the end, don't need to re-compare last two.
+            # can move left one before doing left_bubble()
+            self.move_left()
+            while self.can_move_left() == True:
+            # second pass - moving left
+                self.left_bubble_alt()
+                
+            # don't need to compare last two again
+            if self.light_is_on() == False:
+                self.move_right()
+
+        # cocktail sort attempt, it did not help
+        # self.right_bubble()
+        # while self.light_is_on() == False:
+        #     self.set_light_on()
+        #     # first pass - moving right
+        #     while self.can_move_right() == True:
+        #         # self.right_bubble_cocktail()
+        #         # self.left_bubble_cocktail()
+        #         # self.move_right()
+        #         self.right_bubble()
+        #     if self.light_is_on() == True:
+        #         break
+        #     # once you get to the end, don't need to re-compare last two.
+        #     # can move left one before doing left_bubble()
+        #     self.move_left()
+        #     self.left_bubble()
+        #     while self.can_move_left() == True:
+        #     # second pass - moving left
+        #         # self.left_bubble_cocktail()
+        #         # self.right_bubble_cocktail()
+        #         # self.move_left()
+        #     # variant - regular bubble on the way back
+        #         self.left_bubble()
+            
+        #     # don't need to compare last two again
+        #     if self.light_is_on() == False:
+        #         self.move_right()
+        
+
+        # print(self._list)
         return None
 
 
@@ -124,13 +260,14 @@ if __name__ == "__main__":
     # Test our your implementation from the command line
     # with `python robot_sort.py`
 
-    l = [15, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1, 45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
-
+    # l = [15, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1, 45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
+    # l = [5, 4, 3, 2, 1]
+    l = [11, 13, 7, 17, 9, 20, 1, 21, 2, 4, 22, 16, 15, 10, 23, 19, 8, 3, 5, 14, 6, 0, 24, 12, 18]
     robot = SortingRobot(l)
 
     robot.sort()
     print(robot._list)
-
+    print(robot._time)
 
 '''
 
