@@ -92,12 +92,32 @@ class SortingRobot:
         """
         return self._light == "ON"
 
+    ''' first implementation - selection sort '''
     def sort(self):
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        # test_list = self._list[:]
+   
+        # print(self._list)
+        while self.light_is_on() == False:
+            self.set_light_on()
+            while self.can_move_right() == True:
+                self.swap_item()
+                self.move_right()
+                if self.compare_item() == 1:
+                    self.swap_item()
+                    self.set_light_off()
+                self.move_left()
+                self.swap_item()
+                self.move_right()
+            while self.can_move_left() == True:
+                self.move_left()
+
+        # print(test_list == self._list)
+        return None
+
+
 
 
 if __name__ == "__main__":
@@ -110,3 +130,43 @@ if __name__ == "__main__":
 
     robot.sort()
     print(robot._list)
+
+
+'''
+
+first attempt with insertion sort
+
+ print(self._list)
+        while self.light_is_on() == 0:
+            # print(self._list)
+            self.set_light_on()
+
+            # do this for the first item, index 0
+            self.swap_item()
+            self.move_right()
+            
+            # moving right - goal is to move greater numbers to back
+            while self.can_move_right() == 1:
+                if self.compare_item() == 1:
+                    self.set_light_off()
+                    # self.swap_item()
+                self.move_right()
+
+            # do this for the last item, index -1
+            if self.compare_item() == 1:
+                # self.set_light_off()
+                self.swap_item()
+
+            # going back - move left one first
+            self.move_left()
+
+            # drop off number if it's bigger
+            while self.can_move_left() == 1:
+                if self.compare_item() == 1:
+                    # self.set_light_off()
+                    self.swap_item()
+                self.move_left()
+            self.swap_item()
+            # print(self._list)
+
+'''
